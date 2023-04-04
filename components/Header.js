@@ -4,9 +4,11 @@ import Link from "next/link";
 import { useState } from "react";
 import { Button, Drawer, Select, Space } from "antd";
 import { useRouter } from "next/navigation";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 const { Option } = Select;
 const Header = () => {
+  const { data: session } = useSession();
   const router = useRouter();
   const isLoggedIn = false;
   const [open, setOpen] = useState(false);
@@ -51,16 +53,47 @@ const Header = () => {
             </div>
           ) : (
             <div className=" flex gap-4">
-              <div
+              {/* <div
                 className="py-2 px-6 bg-[#000080] text-white rounded-md font-bold first-letter:text-red-400 cursor-pointer"
                 onClick={adminLoginFunction}
               >
                 Admin Login
-              </div>
+              </div> */}
 
-              <div className="py-2 px-6 bg-[#000080] text-white rounded-md font-bold first-letter:text-red-400">
-                User Login
-              </div>
+              {!session ? (
+                <div
+                  className="py-2 px-6 bg-[#000080] text-white rounded-md font-bold first-letter:text-red-400 cursor-pointer"
+                  onClick={signIn}
+                >
+                  signIn
+                </div>
+              ) : (
+                <>
+                  <div
+                    onClick={signOut}
+                    className="flex gap-4 items-center cursor-pointer"
+                  >
+                    <div>
+                      <img
+                        src={session.user.image}
+                        alt=""
+                        className="h-10 rounded-full"
+                      />
+                    </div>
+                    <div>
+                      <p className="font-bold text-xl">
+                        {session.user.name.toUpperCase()}
+                      </p>
+                    </div>
+                  </div>
+                  {/* <div
+                    className="py-2 px-6 bg-[#000080] text-white rounded-md font-bold first-letter:text-red-400 cursor-pointer"
+                    onClick={signOut}
+                  >
+                    Logout
+                  </div> */}
+                </>
+              )}
             </div>
           )}
         </div>

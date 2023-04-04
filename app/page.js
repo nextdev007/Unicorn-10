@@ -5,11 +5,13 @@ import Footer from "@/components/Footer";
 import Project from "@/components/Project";
 import { db } from "@/firebase/firebase";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Home() {
+  const { data: session } = useSession();
   const [projects, setProjects] = useState([]);
 
   useEffect(
@@ -36,7 +38,7 @@ export default function Home() {
         <div className="space-y-3 md:w-1/2 md:pt-20 px-16">
           <h3 className="text-2xl text-[#800000]">Hello!</h3>
           <h1 className="text-4xl font-bold text-[#800000]">
-            GOOD MORNING, ROHIT PATEL
+            {session && <p>Good Morning , {session.user.name.toUpperCase()}</p>}
           </h1>
           <p className="text-lg font-serif text-[#133337] ">
             Debugging is twice as hard as writing the code in the first
